@@ -16,7 +16,7 @@ func main() {
 
 	
 
-	router := routes.SetupRouter(connection)
+	server := routes.SetupRouter(connection)
 	log.Println("Servidor rodando na porta 8080")
-	router.Run(":8080")
+	server.Run(":8080")
 }
