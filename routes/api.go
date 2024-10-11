@@ -18,7 +18,7 @@ func SetupRouter(connection *sql.DB) *gin.Engine {
 
     // Define as rotas públicas
     router.POST("/login", func(ctx *gin.Context) {
-        // Aqui você valida as credenciais do usuário e gera o token JWT
+        // Todo: valida as credenciais do usuário e gera o token JWT
     })
 
     // Define as rotas protegidas
@@ -32,6 +32,3 @@ func SetupRouter(connection *sql.DB) *gin.Engine {
 
     return router
 }
-
-
-// Implementação do AuthMiddleware para validação do token JWT
