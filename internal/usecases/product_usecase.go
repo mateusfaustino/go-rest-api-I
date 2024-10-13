@@ -17,8 +17,8 @@ func NewProductUseCase(repo repositories.ProductRepository) ProductUseCase {
 	}
 }
 
-func (pu *ProductUseCase) GetProducts() ([]models.Product, error) {
-	products, err := pu.Repository.GetProducts()
+func (pu *ProductUseCase) Index() ([]models.Product, error) {
+	products, err := pu.Repository.Index()
 	if err != nil {
 		return nil, err
 	}
@@ -31,12 +31,41 @@ func (pu *ProductUseCase) GetProducts() ([]models.Product, error) {
 }
 
 
-// func (uc *ProductUseCase) CreateProduct(product *models.Product) error {
-// 	return uc.Repo.Create(product)
-// }
+// GetProductById busca um produto pelo ID usando o repositório
+func (pu *ProductUseCase) Show(id int64) (*models.Product, error) {
+	product, err := pu.Repository.Show(id)
+	if err != nil {
+		return nil, err
+	}
 
-// func (uc *ProductUseCase) GetProductByID(id int) (*models.Product, error) {
-// 	return uc.Repo.GetByID(id)
-// }
+	if product == nil {
+		return nil, errors.New("produto não encontrado")
+	}
 
-// Outros métodos para Update e Delete
+	return product, nil
+}
+
+// CreateProduct cria um novo produto usando o repositório
+func (pu *ProductUseCase) Store(product *models.Product) error {
+	return pu.Repository.Store(product)
+}
+
+func (pu *ProductUseCase) Update(product *models.Product) error {
+	// Validar se o produto existe, se necessário
+	_, err := pu.Repository.Show(product.Id)
+	if err != nil {
+		return err
+	}
+
+	return pu.Repository.Update(product)
+}
+
+func (pu *ProductUseCase) Destroy(id int64) error {
+	// Verifique se o produto existe, se necessário
+	_, err := pu.Repository.Show(id)
+	if err != nil {
+		return err
+	}
+	
+	return pu.Repository.Destroy(id)
+}

@@ -1,0 +1,22 @@
+-- Seeding para a tabela 'produtos'
+INSERT INTO products (name, price) VALUES 
+    ('Camisa Polo', 79.90),
+    ('Camisa Social', 120.00),
+    ('Calça Jeans', 150.50),
+    ('Bermuda', 89.90),
+    ('Jaqueta de Couro', 250.00),
+    ('Blusa de Moletom', 180.00),
+    ('Terno Completo', 600.00),
+    ('Camiseta Básica', 39.90),
+    ('Suéter', 110.00),
+    ('Gravata', 35.00),
+    ('Calça de Sarja', 130.00),
+    ('Jaqueta Jeans', 220.00),
+    ('Camiseta Estampada', 49.90),
+    ('Calção Esportivo', 55.00),
+    ('Chinelo', 29.90),
+    ('Tênis Casual', 199.90),
+    ('Sapatênis', 159.90),
+    ('Relógio de Pulso', 320.00),
+    ('Boné', 25.00),
+    ('Carteira de Couro', 99.90);

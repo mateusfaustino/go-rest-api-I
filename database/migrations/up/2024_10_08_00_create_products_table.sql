@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name CHAR(50) NOT NULL,
+    price NUMERIC(10,2) NOT NULL
+);
+
