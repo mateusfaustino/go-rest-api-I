@@ -16,6 +16,13 @@ func SetupRouter(connection *sql.DB) *gin.Engine {
 	productUseCase := usecase.NewProductUseCase(ProductRepository)
 	productController := controllers.NewProductController(productUseCase)
 
+    
+	UserRepository := repositories.NewUserRepository(connection)
+	UserUseCase := usecase.NewUserUseCase(UserRepository)
+	UserController := controllers.NewUserController(UserUseCase)
+
+
+
 	// Define as rotas públicas
 	router.POST("/login", func(ctx *gin.Context) {
 		// Todo: valida as credenciais do usuário e gera o token JWT
@@ -36,6 +43,16 @@ func SetupRouter(connection *sql.DB) *gin.Engine {
         productRouter.POST("/", productController.Store)
         productRouter.PUT("/:id", productController.Update)
         productRouter.DELETE("/:id", productController.Destroy) 
+	}
+    
+    // Grupo de rotas para produtos, com prefixo `/user`
+	userRouter := router.Group("/user")
+	{
+		userRouter.GET("/", UserController.Index)
+        // productRouter.GET("/:id", UserController.Show)
+        // productRouter.POST("/", UserController.Store)
+        // productRouter.PUT("/:id", UserController.Update)
+        // productRouter.DELETE("/:id", UserController.Destroy) 
 	}
 
 	// Define as rotas protegidas
