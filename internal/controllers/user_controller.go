@@ -44,3 +44,28 @@ func (p *UserController) Index(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, users)
 }
+
+func (p *UserController) Show(ctx *gin.Context) {
+	// Obtém o ID do parâmetro de rota e o converte para int64
+	idParam := ctx.Param("id")
+	id, err := strconv.ParseInt(idParam, 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		return
+	}
+
+	// Chama o UseCase para buscar o user pelo ID
+	user, err := p.UserUseCase.Show(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if user == nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Produto não encontrado"})
+		return
+	}
+
+	// Retorna o user encontrado
+	ctx.JSON(http.StatusOK, gin.H{"user": user})
+}

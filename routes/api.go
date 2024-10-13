@@ -49,10 +49,10 @@ func SetupRouter(connection *sql.DB) *gin.Engine {
 	userRouter := router.Group("/user")
 	{
 		userRouter.GET("/", UserController.Index)
-        // productRouter.GET("/:id", UserController.Show)
-        // productRouter.POST("/", UserController.Store)
-        // productRouter.PUT("/:id", UserController.Update)
-        // productRouter.DELETE("/:id", UserController.Destroy) 
+        userRouter.GET("/:id", UserController.Show)
+        // userRouter.POST("/", UserController.Store)
+        // userRouter.PUT("/:id", UserController.Update)
+        // userRouter.DELETE("/:id", UserController.Destroy) 
 	}
 
 	// Define as rotas protegidas

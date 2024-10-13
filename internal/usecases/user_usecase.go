@@ -29,3 +29,17 @@ func (pu *UserUseCase) Index(limit, offset int) ([]models.User, error) {
 
 	return users, nil
 }
+
+// GetUserById busca um produto pelo ID usando o repositório
+func (uu *UserUseCase) Show(id int64) (*models.User, error) {
+	user, err := uu.Repository.Show(id)
+	if err != nil {
+		return nil, err
+	}
+
+	if user == nil {
+		return nil, errors.New("produto não encontrado")
+	}
+
+	return user, nil
+}
