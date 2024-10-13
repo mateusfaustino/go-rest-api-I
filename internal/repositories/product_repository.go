@@ -18,11 +18,12 @@ func NewProductRepository(connection *sql.DB) ProductRepository {
 	}
 }
 
-func (pr *ProductRepository) Index() ([]models.Product, error) {
-	query := "SELECT id, name, price FROM products"
-	rows, err := pr.connection.Query(query)
+// Index retorna uma lista paginada de produtos com base nos parâmetros limit e offset.
+func (pr *ProductRepository) Index(limit, offset int) ([]models.Product, error) {
+	query := "SELECT id, name, price FROM products LIMIT ? OFFSET ?"
+	rows, err := pr.connection.Query(query, limit, offset)
 	if err != nil {
-		log.Printf("Erro ao executar a query GetProducts: %v", err)
+		log.Printf("Erro ao executar a query Index: %v", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -46,6 +47,7 @@ func (pr *ProductRepository) Index() ([]models.Product, error) {
 
 	return productList, nil
 }
+
 
 // GetProductById retorna um produto específico com base no ID fornecido
 func (pr *ProductRepository) Show(id int64) (*models.Product, error) {

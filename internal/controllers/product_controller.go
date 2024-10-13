@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -20,17 +19,32 @@ func NewProductController(usecase usecase.ProductUseCase) ProductController {
 	}
 }
 
-func (p *ProductController) Index(ctx *gin.Context){
-	products, err:= p.ProductUseCase.Index()
+func (p *ProductController) Index(ctx *gin.Context) {
+	// Captura os parâmetros de paginação
+	limit, err := strconv.Atoi(ctx.DefaultQuery("limit", "10")) // Limite padrão de 10 produtos por página
+	if err != nil || limit < 1 {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Parâmetro 'limit' inválido"})
+		return
+	}
 
-	if err !=nil {
-		fmt.Println(err)
-		ctx.JSON(http.StatusInternalServerError, err)
-		return 
+	page, err := strconv.Atoi(ctx.DefaultQuery("page", "1")) // Página padrão é a primeira
+	if err != nil || page < 1 {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Parâmetro 'page' inválido"})
+		return
+	}
+
+	offset := (page - 1) * limit // Calcula o deslocamento com base na página atual e no limite
+
+	// Chama a função de listagem de produtos com paginação
+	products, err := p.ProductUseCase.Index(limit, offset)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar produtos"})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, products)
 }
+
 
 
 func (p *ProductController) Show(ctx *gin.Context) {

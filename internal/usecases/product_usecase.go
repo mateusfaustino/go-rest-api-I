@@ -17,8 +17,8 @@ func NewProductUseCase(repo repositories.ProductRepository) ProductUseCase {
 	}
 }
 
-func (pu *ProductUseCase) Index() ([]models.Product, error) {
-	products, err := pu.Repository.Index()
+func (pu *ProductUseCase) Index(limit, offset int) ([]models.Product, error) {
+	products, err := pu.Repository.Index(limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -29,6 +29,7 @@ func (pu *ProductUseCase) Index() ([]models.Product, error) {
 
 	return products, nil
 }
+
 
 
 // GetProductById busca um produto pelo ID usando o repositório
