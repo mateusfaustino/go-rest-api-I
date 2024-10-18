@@ -7,7 +7,7 @@ import (
 	"time"
 
 	// "github.com/99designs/gqlgen/integration/server/models-go"
-	"github.com/mateusfaustino/go-rest-api-i/pkg/models"
+	"github.com/mateusfaustino/go-rest-api-i/internal/models"
 )
 
 type UserRepository struct {
@@ -32,11 +32,11 @@ func (ur *UserRepository) GetUserByUsername(username string) (*models.User, erro
 	return &user, nil
 }
 
-func (u *UserRepository) Index(limit, offset int) ([]models.User, error) {
+func (u *UserRepository) ListAll(limit, offset int) ([]models.User, error) {
 	query := "SELECT id, username, created_at, updated_at, created_by, updated_by FROM users LIMIT ? OFFSET ?"
 	rows, err := u.connection.Query(query, limit, offset)
 	if err != nil {
-		log.Printf("Erro ao executar a query Index: %v", err)
+		log.Printf("Erro ao executar a query ListAll: %v", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -47,7 +47,7 @@ func (u *UserRepository) Index(limit, offset int) ([]models.User, error) {
 
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.ID, &user.Username, &createdAt, &updatedAt, &user.CreatedBy, &user.UpdatedBy); err != nil {
+		if err := rows.Scan(&user.ID, &user.Username, &createdAt, &updatedAt, &user.CreatedBy, &user.UpdateByIddBy); err != nil {
 			log.Printf("Erro ao escanear o usuário: %v", err)
 			return nil, err
 		}
@@ -58,7 +58,7 @@ func (u *UserRepository) Index(limit, offset int) ([]models.User, error) {
 			return nil, errors.New("erro ao converter created_at para time.Time")
 		}
 
-		user.UpdatedAt, err = time.Parse("2006-01-02 15:04:05", string(updatedAt))
+		user.UpdateByIddAt, err = time.Parse("2006-01-02 15:04:05", string(updatedAt))
 		if err != nil {
 			return nil, errors.New("erro ao converter updated_at para time.Time")
 		}
@@ -75,15 +75,15 @@ func (u *UserRepository) Index(limit, offset int) ([]models.User, error) {
 }
 
 // GetProductById retorna um produto específico com base no ID fornecido
-func (u *UserRepository) Show(id int64) (*models.User, error) {
+func (u *UserRepository) GetById(id int64) (*models.User, error) {
 	query := "SELECT id, username, created_at, updated_at, created_by, updated_by FROM users WHERE id = ?"
 	row := u.connection.QueryRow(query, id)
 
 	var user models.User
 	var createdAt []byte
 	var updatedAt []byte
-	
-	if err := row.Scan(&user.ID, &user.Username, &createdAt, &updatedAt, &user.CreatedBy, &user.UpdatedBy); err != nil {
+
+	if err := row.Scan(&user.ID, &user.Username, &createdAt, &updatedAt, &user.CreatedBy, &user.UpdateByIddBy); err != nil {
 		log.Printf("Erro ao escanear o usuário: %v", err)
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (u *UserRepository) Show(id int64) (*models.User, error) {
 		return nil, errors.New("erro ao converter created_at para time.Time")
 	}
 
-	user.UpdatedAt, err = time.Parse("2006-01-02 15:04:05", string(updatedAt))
+	user.UpdateByIddAt, err = time.Parse("2006-01-02 15:04:05", string(updatedAt))
 	if err != nil {
 		return nil, errors.New("erro ao converter updated_at para time.Time")
 	}

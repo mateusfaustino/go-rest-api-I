@@ -5,21 +5,21 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/mateusfaustino/go-rest-api-i/internal/models"
 	"github.com/mateusfaustino/go-rest-api-i/internal/usecases"
-	_"github.com/mateusfaustino/go-rest-api-i/pkg/models"
 )
 
 type UserController struct {
-	UserUseCase usecase.UserUseCase
+	UserUseCase usecases.UserUseCase
 }
 
-func NewUserController(usecase usecase.UserUseCase) UserController {
+func NewUserController(usecase usecases.UserUseCase) UserController {
 	return UserController{
 		UserUseCase: usecase,
 	}
 }
 
-func (p *UserController) Index(ctx *gin.Context) {
+func (p *UserController) ListAll(ctx *gin.Context) {
 	// Captura os parâmetros de paginação
 	limit, err := strconv.Atoi(ctx.DefaultQuery("limit", "10")) // Limite padrão de 10 usuários por página
 	if err != nil || limit < 1 {
@@ -36,7 +36,7 @@ func (p *UserController) Index(ctx *gin.Context) {
 	offset := (page - 1) * limit // Calcula o deslocamento com base na página atual e no limite
 
 	// Chama a função de listagem de usuários com paginação
-	users, err := p.UserUseCase.Index(limit, offset)
+	users, err := p.UserUseCase.ListAll(limit, offset)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar usuários"})
 		return
@@ -45,7 +45,7 @@ func (p *UserController) Index(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, users)
 }
 
-func (p *UserController) Show(ctx *gin.Context) {
+func (p *UserController) GetById(ctx *gin.Context) {
 	// Obtém o ID do parâmetro de rota e o converte para int64
 	idParam := ctx.Param("id")
 	id, err := strconv.ParseInt(idParam, 10, 64)
@@ -55,7 +55,7 @@ func (p *UserController) Show(ctx *gin.Context) {
 	}
 
 	// Chama o UseCase para buscar o user pelo ID
-	user, err := p.UserUseCase.Show(id)
+	user, err := p.UserUseCase.GetById(id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

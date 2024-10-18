@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
-	"github.com/mateusfaustino/go-rest-api-i/config"
+	"github.com/mateusfaustino/go-rest-api-i/configurations"
 	"github.com/mateusfaustino/go-rest-api-i/routes"
 )
 
 func main() {
-	connection, err := config.ConnectDb()
+	connection, err := configurations.ConnectDb()
 	if err != nil {
 		log.Fatal("Erro ao conectar ao banco de dados:", err)
 	}

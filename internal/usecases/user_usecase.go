@@ -1,9 +1,9 @@
-package usecase
+package usecases
 
 import (
 	"errors"
 
-	"github.com/mateusfaustino/go-rest-api-i/pkg/models"
+	"github.com/mateusfaustino/go-rest-api-i/internal/models"
 	"github.com/mateusfaustino/go-rest-api-i/internal/repositories"
 )
 
@@ -17,8 +17,8 @@ func NewUserUseCase(repo repositories.UserRepository) UserUseCase {
 	}
 }
 
-func (pu *UserUseCase) Index(limit, offset int) ([]models.User, error) {
-	users, err := pu.Repository.Index(limit, offset)
+func (pu *UserUseCase) ListAll(limit, offset int) ([]models.User, error) {
+	users, err := pu.Repository.ListAll(limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -31,8 +31,8 @@ func (pu *UserUseCase) Index(limit, offset int) ([]models.User, error) {
 }
 
 // GetUserById busca um produto pelo ID usando o repositório
-func (uu *UserUseCase) Show(id int64) (*models.User, error) {
-	user, err := uu.Repository.Show(id)
+func (uu *UserUseCase) GetById(id int64) (*models.User, error) {
+	user, err := uu.Repository.GetById(id)
 	if err != nil {
 		return nil, err
 	}
