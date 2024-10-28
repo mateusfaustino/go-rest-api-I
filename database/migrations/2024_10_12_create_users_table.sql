@@ -1,11 +1,10 @@
 CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    created_by INT,
-    updated_by INT,
-    FOREIGN KEY (created_by) REFERENCES users(id),
-    FOREIGN KEY (updated_by) REFERENCES users(id)
+    id INT AUTO_INCREMENT PRIMARY KEY,        -- ID único do usuário
+    username VARCHAR(255) NOT NULL,           -- Nome de usuário (não nulo)
+    password VARCHAR(255) NOT NULL,           -- Senha do usuário (não nulo)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Data de criação
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- Data de atualização
+    created_by INT DEFAULT NULL,              -- ID do usuário que criou (nulo por padrão)
+    updated_by INT DEFAULT NULL,              -- ID do usuário que atualizou (nulo por padrão)
+    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active' -- Status do usuário, pode ser 'active' ou 'inactive'
 );

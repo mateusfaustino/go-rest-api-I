@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mateusfaustino/go-rest-api-i/configurations"
 )
 
 type listAllProductResponse struct {
@@ -36,6 +37,12 @@ func (p *ProductController) ListAll(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar produtos"})
+		return
+	}
+
+	if len(products) == 0 {
+		notFoundError := configurations.NewNotFoundError("Nenhum produto encontrado")
+		ctx.JSON(notFoundError.Code, notFoundError)
 		return
 	}
 

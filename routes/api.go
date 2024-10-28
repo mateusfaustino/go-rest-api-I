@@ -4,12 +4,12 @@ import (
 	"database/sql"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mateusfaustino/go-rest-api-i/internal/controllers"
+	"github.com/mateusfaustino/go-rest-api-i/internal/controllers/user_controller"
 	"github.com/mateusfaustino/go-rest-api-i/internal/controllers/product_controller"
-	"github.com/mateusfaustino/go-rest-api-i/internal/repositories"
+	"github.com/mateusfaustino/go-rest-api-i/internal/repositories/user_repository"
 	"github.com/mateusfaustino/go-rest-api-i/internal/repositories/product_repository"
 	"github.com/mateusfaustino/go-rest-api-i/internal/usecases/product_usecase"
-	"github.com/mateusfaustino/go-rest-api-i/internal/usecases"
+	"github.com/mateusfaustino/go-rest-api-i/internal/usecases/user_usecase"
 )
 
 func SetupRouter(connection *sql.DB) *gin.Engine {
@@ -20,9 +20,9 @@ func SetupRouter(connection *sql.DB) *gin.Engine {
 	productController := product_controller.NewProductController(productUseCase)
 
 
-	UserRepository := repositories.NewUserRepository(connection)
-	UserUseCase := usecases.NewUserUseCase(UserRepository)
-	UserController := controllers.NewUserController(UserUseCase)
+	UserRepository := user_repository.NewUserRepository(connection)
+	UserUseCase := user_usecase.NewUserUseCase(UserRepository)
+	UserController := user_controller.NewUserController(UserUseCase)
 
 	// Define as rotas públicas
 	router.POST("/login", func(ctx *gin.Context) {
@@ -48,9 +48,9 @@ func SetupRouter(connection *sql.DB) *gin.Engine {
 
 	userRouter := router.Group("/user")
 	{
-		userRouter.GET("/", UserController.ListAll)
-		userRouter.GET("/:id", UserController.GetById)
-		// userRouter.POST("/", UserController.Store)
+		// userRouter.GET("/", UserController.ListAll)
+		// userRouter.GET("/:id", UserController.GetById)
+		userRouter.POST("/", UserController.Store)
 		// userRouter.PUT("/:id", UserController.UpdateById)
 		// userRouter.DELETE("/:id", UserController.DeleteById)
 	}
